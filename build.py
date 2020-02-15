@@ -16,7 +16,9 @@ if script == "":
 print("Building script " + script + "...")
 
 serial_ports = [tuple(p) for p in list(serial.tools.list_ports.comports())]
-arduino_ports = [port[0] for port in serial_ports if port[0].startswith("/dev/ttyACM")]
+#arduino_ports = [port[0] for port in serial_ports if port[0].startswith("/dev/ttyACM")]
+arduino_ports = [port[0] for port in serial_ports[0].startswith("COM")]
+
 
 if len(arduino_ports) == 0:
     print("Error encountered on build! Could not discover any serial devices.")
