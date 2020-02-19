@@ -1,4 +1,4 @@
-#include "SevSeg.h"
+#include "./libraries/SevSeg-master/SevSeg.h"
 
 SevSeg sevseg;
 
