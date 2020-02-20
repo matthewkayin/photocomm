@@ -1,4 +1,6 @@
 #include "./libraries/SevSeg-master/SevSeg.h"
+#include <Wire.h> //For synchronous communication
+
 
 SevSeg sevseg;
 
@@ -28,8 +30,51 @@ void setup(){
     before_time = millis();
 }
 
-void loop(){
+/*void received(int bytesRead){
+ *  while (1 < Wire.available()){ //loop through all but the last
+ *      char c = Wire.read(); //receive byte as a character.
+ *  }                      
+ *  int x = Wire.read(); //receive byte as an int
+ *}
+ *
+ * void requested(){
+ *      Wire.write("hello "); //send the 6 byte message requested
+ * }
 
+*/
+void loop(){
+    //we can either start the bus here on in the setup function.
+    //  need to discuss pros/cons
+    //Wire.begin(x);//join i2c bus. where x = optional 7-bit slave address
+
+
+    /*Basic sending structure is dependant on who is the master
+     *if master is writer:
+     *  
+     *  writer (master):
+     *      1. Wire.beginTransmission(slave_addr); //slave_addr is 7-bit address of slave being sent to
+     *      2. Wire.write(str); //str can be a byte, string, array of data. if str is an array, also need to include # of bytes to be sent
+     *      3. Wire.endTransmission(stop); //Sends the message queued by write(), and either re starts transmission or releases bus if stop is true
+     *  
+     *  receiver (slave):
+     *      1. Wire.begin(4); //joins bus as slave with address #4
+     *      2. Wire.onReceive(received); // received (declared above) is a function that should be called when slave device receives transmission.
+     *                   
+     * if master is reader:
+     *  
+     *  writer (slave):
+     *      1. Wire.begin(2); //Join i2c bus as a slave with address #4
+     *      2. Wire.onRequest(requested); //requested (declared above) is a function to be called when
+     *      3. requested sends the data
+     *      
+     *  receiver (master):
+     *      1. Wire.begin(); //join i2c bus as master
+     *      2. Wire.request(2, numBytes); //request 6 bytes of data from slave #2
+     *      3. while(Wire.available()){ //slave may send fewer bytes than requested
+     *              char c = Wire.read(); //receive byte as character 
+     *         }
+     *      
+    */  
     unsigned long elapsed = millis() - before_time;
     if(elapsed >= SAMPLE_TIME){
 
