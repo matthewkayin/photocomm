@@ -4,8 +4,11 @@ SevSeg sevseg;
 
 unsigned long before_time = 0;
 const long SECOND = 1000;
-const int frequency = 1;
+const int frequency = 10;
 const long SAMPLE_TIME = SECOND / frequency;
+
+int analog_values[256];
+int analog_index = 0;
 
 const int MIC1 = A0;
 
@@ -26,6 +29,8 @@ void setup(){
     sevseg.setBrightness(90);
 
     before_time = millis();
+
+    Serial.begin(9600);
 }
 
 void loop(){
@@ -34,9 +39,26 @@ void loop(){
     if(elapsed >= SAMPLE_TIME){
 
         int signal_counter = analogRead(MIC1);
-        sevseg.setNumber(signal_counter);
+        analog_values[analog_index] = signal_counter;
+        analog_index++;
+
+        if(analog_index == 256){
+
+            for(int i = 0; i < 256; i++){
+
+                Serial.print(analog_values[i]);
+                Serial.print(" ");
+            }
+
+            Serial.print("\n");
+
+            analog_index = 0;
+        }
+
+        //float value = (signal_counter * 5.0) / 1024.0;
+        //sevseg.setNumber(value, 3);
         before_time += SAMPLE_TIME;
     }
 
-    sevseg.refreshDisplay();
+    //sevseg.refreshDisplay();
 }
