@@ -31,7 +31,7 @@ subprocess.run(["/opt/arduino-1.8.10/arduino", "--board", "arduino:avr:uno", "--
 
 if serial_listen:
     print("Beginning serial listen...")
-    ser = serial.Serial("/dev/ttyACM0", 9600, timeout=1)
+    ser = serial.Serial(chosen_port, 9600, timeout=1)
     while True:
         data = ser.read(100)
         data_string = str(data)[2:len(data) - 1]

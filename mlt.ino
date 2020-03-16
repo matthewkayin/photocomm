@@ -20,6 +20,7 @@ void setup(){
 
 void loop(){
 
+    // what if statement is this???
         int signal_counter = analogRead(MIC1);
         analog_values[analog_index] = signal_counter;
         analog_index++;
