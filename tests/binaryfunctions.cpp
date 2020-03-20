@@ -2,33 +2,48 @@
 #include <math.h>
 
 bool* to_binary(int n, int r){
-	bool *bin = new bool[r+1];
-	int i, j = 0;
-	if(n < 0){
-	    n = n * -1;
-	    j = 1;
+
+	bool* ret_val = new bool[8];
+	int remaining = n;
+	if(remaining < 0){
+
+		ret_val[0] = 1;
+		remaining *= -1;
+
+	}else{
+
+		ret_val[0] = 0;
 	}
-	for(i = 0; n >=1; i++){
-	    bin[i] = n % 2;
-	    n = n / 2;
+
+	for(int i = 1; i < r; i++){
+
+		if(remaining >= std::pow(2, r - i - 1)){
+
+			ret_val[i] = 1;
+			remaining -= std::pow(2, r - i - 1);
+
+		}else{
+
+			ret_val[i] = 0;
+		}
 	}
-	bin[r] = j;
-	if(i > r){
-		std::cout << "ERROR OUT OF RANGE!";
-		return NULL;
-	}
-	return bin;
+
+	return ret_val;
 }
 
 int to_int(bool* n, int r){
-	int num = 0, i;
-	for(i = 0; i < r; i++){
-		num += (n[i] * pow(2, i));
+
+	int sum = 0;
+	for(int i = 1; i < r; i++){
+
+		sum += n[i] * std::pow(2, r - i - 1);
 	}
-	if(n[r] == 1){
-		return num * -1;
+	if(n[0]){
+
+		sum *= -1;
 	}
-	return num;
+
+	return sum;
 }
 
 int main(){
@@ -36,7 +51,7 @@ int main(){
     bool succeeds_all = true;
 
     int r = 8;
-    for(int i = -std::pow(2, r - 1); i <= std::pow(2, r - 1); i++){
+    for(int i = -std::pow(2, r - 1) + 1; i <= std::pow(2, r - 1) - 1; i++){
 
         bool* output = to_binary(i, r);
         bool success = to_int(output, r) == i;
