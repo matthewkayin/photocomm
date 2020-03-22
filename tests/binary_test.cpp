@@ -3,7 +3,35 @@
 
 int num = 0;
 int numSize = 0;
-void binTest(int binary, int  expected){
+
+bool* to_binary(int n, int r){
+	bool *bin = new bool[r];
+	int i;
+	if(n < 0){
+		bin[0] = 1;
+	} else { bin[0] = 0; }
+	for(i = 1; n > 0; i++){
+		bin[i] = n % 2;
+		n = n /2;
+	}
+	if(i > r){
+		std::cout << "ERROR OUT OF RANGE!";
+		return NULL;
+	}
+	return bin;
+}
+
+int to_int(bool* n, int r){
+	int num = 0, i;
+	for(i = 0; i < r-1; i++){
+		num += (n[i] * pow(2, i));
+	}
+	if(n[r-1] == 1){
+		return num * -1;
+	}
+	return num;
+}
+void binTest(int binary, int expected){
     
     if (binary != expected){
         /* Serial.println("TEST FAILED!");
@@ -12,11 +40,11 @@ void binTest(int binary, int  expected){
         Serial.print("\tEXPECTED VALUE: ");
         Serial.println(expected); */
         std::cout << "TEST FAILED!\n";
-        std::cout << "Binary value: " << binary << "\t EXPECTED VALUE: " << expected << std::endl;
+        std::cout << "Binary value: " << binary << "\tEXPECTED VALUE: " << expected << std::endl;
     
     }else{
         //Serial.println("TEST PASSED!");
-        std::cout << "TEST PASSED!\n";
+        std::cout << "OK ";
     }
 }
 
@@ -24,25 +52,36 @@ void checkNumbers(int num, int bitSize){
     
     int i = 0;
     int max = 0;
+
     if (num < 0){
-        i = -std::pow(2, bitSize - 1); //TODO: replace with arduino exponent 
-        max = std::pow(2, bitSize - 1) - 1; //TODO: replace with arduino exponent 
+        i = -pow(2, bitSize - 1); //TODO: replace with arduino exponent 
+        max = pow(2, bitSize - 1) - 1; //TODO: replace with arduino exponent 
     }else{
         i = 0;
-        max = std::pow(2, bitSize) - 1; //TODO: replace with arduino exponent 
+        max = pow(2, bitSize) - 1; //TODO: replace with arduino exponent 
     }
-    
+    bool* n; 
     for (;i <= max; i++){
-        //binTest(to_int(to_binary(i, bitSize)), i);
-        binTest(num, num);
-        std::cout <<  i << std::endl;
+        n = to_binary(i, bitSize);
+        binTest(to_int(n, i), i);
+        //std::cout <<  i << std::endl;
     }
 }
 
+
+
 int main(){
 //loop(){
-    for (int i = 0; i < 5; i++){
-        checkNumbers(-5, 10);
+   
+    //checkNumbers(-5, 10);
+    
+    bool* n = new bool[4];
+    
+    n = to_binary(4, 4);
+    
+    for (int i = 0; i < 4; i++){
+        std::cout << n[i];
     }
-
+   
+    return 0;
 }
